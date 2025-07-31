@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 
 // Configure axios with environment-based API URL
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://project5-wud7.onrender.com';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 const api = axios.create({
     baseURL: API_BASE_URL,
     timeout: 10000,

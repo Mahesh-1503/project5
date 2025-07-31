@@ -15,11 +15,7 @@ const PORT = process.env.PORT || 5000;
 // Configure CORS for production
 app.use(cors({
   origin: process.env.NODE_ENV === 'production'
-    ? [
-      'https://your-frontend-domain.vercel.app',
-      'https://your-frontend-domain.onrender.com',
-      'https://project5-wud7.onrender.com'
-    ]
+    ? ['https://your-frontend-domain.onrender.com', 'https://your-frontend-domain.vercel.app']
     : 'http://localhost:3000',
   credentials: true
 }));
@@ -56,20 +52,42 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// API-only server - frontend will be deployed separately on Vercel
-app.get('/', (req, res) => {
-  res.json({
-    message: 'MERN Registration API Server',
-    endpoints: {
-      health: '/api/health',
-      registration: '/api/registration',
-      users: '/api/registration',
-      stats: '/api/registration/stats',
-      excel: '/api/registration/excel'
-    },
-    frontend: 'Deployed separately on Vercel'
-  });
-});
+// Serve static files from React app in production
+if (process.env.NODE_ENV === 'production') {
+  // Check if the build directory exists
+  const buildPath = path.join(__dirname, 'client/build');
+  const indexPath = path.join(buildPath, 'index.html');
+
+  if (fs.existsSync(buildPath)) {
+    console.log('✅ Found React build directory, serving static files');
+    app.use(express.static(buildPath));
+
+    app.get('*', (req, res) => {
+      if (fs.existsSync(indexPath)) {
+        res.sendFile(indexPath);
+      } else {
+        res.status(404).json({
+          error: 'Frontend not built',
+          message: 'React build files not found. Please build the frontend first.',
+          path: indexPath
+        });
+      }
+    });
+  } else {
+    console.log('⚠️  React build directory not found, serving API only');
+    // If no frontend build, serve API only
+    app.get('*', (req, res) => {
+      res.status(404).json({
+        error: 'Not Found',
+        message: 'This is a backend API server. Frontend not available.',
+        apiEndpoints: {
+          health: '/api/health',
+          registration: '/api/registration'
+        }
+      });
+    });
+  }
+}
 
 // Error handling middleware
 app.use((err, req, res, next) => {

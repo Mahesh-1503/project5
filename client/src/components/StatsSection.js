@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { 
-  Database, 
-  FileSpreadsheet, 
-  Users, 
+import {
+  Database,
+  FileSpreadsheet,
+  Users,
   Calendar,
   RefreshCw,
   TrendingUp,
@@ -12,10 +12,10 @@ import {
 } from 'lucide-react';
 
 // Configure axios with environment-based API URL
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://project5-wud7.onrender.com';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 const api = axios.create({
-    baseURL: API_BASE_URL,
-    timeout: 10000,
+  baseURL: API_BASE_URL,
+  timeout: 10000,
 });
 
 const StatsSection = () => {
@@ -27,19 +27,19 @@ const StatsSection = () => {
   const fetchStats = async () => {
     try {
       setLoading(true);
-      
+
       // Fetch statistics
       const statsResponse = await api.get('/api/registration/stats');
       setStats(statsResponse.data.stats);
-      
+
       // Fetch MongoDB registrations
       const mongoResponse = await api.get('/api/registration');
       setRegistrations(mongoResponse.data.users);
-      
+
       // Fetch Excel data
       const excelResponse = await api.get('/api/registration/excel');
       setExcelData(excelResponse.data.registrations);
-      
+
     } catch (error) {
       console.error('Error fetching stats:', error);
       toast.error('Failed to load statistics');
@@ -80,7 +80,7 @@ const StatsSection = () => {
       <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
         <h1 style={{ color: '#333', marginBottom: '0.5rem' }}>Registration Statistics</h1>
         <p style={{ color: '#666' }}>Overview of registration data from database and Excel file</p>
-        <button 
+        <button
           onClick={fetchStats}
           style={{
             marginTop: '1rem',
@@ -108,19 +108,19 @@ const StatsSection = () => {
           <h3>{stats?.mongoDB?.totalRegistrations || 0}</h3>
           <p>MongoDB Registrations</p>
         </div>
-        
+
         <div className="stat-card">
           <FileSpreadsheet size={24} style={{ marginBottom: '0.5rem' }} />
           <h3>{stats?.excelFile?.totalRegistrations || 0}</h3>
           <p>Excel File Entries</p>
         </div>
-        
+
         <div className="stat-card">
           <Activity size={24} style={{ marginBottom: '0.5rem' }} />
           <h3>{formatFileSize(stats?.excelFile?.fileSize || 0)}</h3>
           <p>Excel File Size</p>
         </div>
-        
+
         <div className="stat-card">
           <Calendar size={24} style={{ marginBottom: '0.5rem' }} />
           <h3>{stats?.excelFile?.lastModified ? formatDate(stats.excelFile.lastModified) : 'N/A'}</h3>
@@ -133,10 +133,10 @@ const StatsSection = () => {
         <h2 style={{ color: '#333', marginBottom: '1.5rem', textAlign: 'center' }}>
           Recent Registrations (MongoDB)
         </h2>
-        
+
         {registrations.length > 0 ? (
-          <div style={{ 
-            maxHeight: '400px', 
+          <div style={{
+            maxHeight: '400px',
             overflowY: 'auto',
             border: '1px solid #e1e5e9',
             borderRadius: '8px',
@@ -180,10 +180,10 @@ const StatsSection = () => {
         <h2 style={{ color: '#333', marginBottom: '1.5rem', textAlign: 'center' }}>
           Excel File Data
         </h2>
-        
+
         {excelData.length > 0 ? (
-          <div style={{ 
-            maxHeight: '400px', 
+          <div style={{
+            maxHeight: '400px',
             overflowY: 'auto',
             border: '1px solid #e1e5e9',
             borderRadius: '8px',
@@ -224,10 +224,10 @@ const StatsSection = () => {
 
       {/* File Information */}
       {stats?.excelFile?.filePath && (
-        <div style={{ 
-          marginTop: '2rem', 
-          padding: '1rem', 
-          background: '#f8f9fa', 
+        <div style={{
+          marginTop: '2rem',
+          padding: '1rem',
+          background: '#f8f9fa',
           borderRadius: '8px',
           border: '1px solid #e1e5e9'
         }}>
