@@ -99,6 +99,41 @@ This will start both the backend server and React frontend concurrently.
 - **Backend API**: http://localhost:5000
 - **Health Check**: http://localhost:5000/api/health
 
+## 🚀 Deployment
+
+### Quick Deployment Options
+
+**Option 1: Render (Recommended)**
+- Perfect for full-stack MERN applications
+- Supports both frontend and backend
+- Free tier available
+
+**Option 2: Vercel**
+- Excellent for frontend deployment
+- Can handle backend APIs
+- Great performance and CDN
+
+### Deployment Steps
+
+1. **Set up MongoDB Atlas**
+   - Create a free cluster at [MongoDB Atlas](https://www.mongodb.com/atlas)
+   - Get your connection string
+
+2. **Deploy to your chosen platform**
+   - See `DEPLOYMENT.md` for detailed instructions
+   - Use the provided configuration files (`render.yaml`, `vercel.json`)
+
+3. **Configure environment variables**
+   - Set `MONGODB_URI` to your Atlas connection string
+   - Set `REACT_APP_API_URL` to your backend URL
+
+### Configuration Files
+- `render.yaml` - Render deployment configuration
+- `vercel.json` - Vercel deployment configuration
+- `client/vercel.json` - Frontend-specific Vercel config
+
+For detailed deployment instructions, see [DEPLOYMENT.md](./DEPLOYMENT.md)
+
 ## 🗄️ API Endpoints
 
 ### Registration

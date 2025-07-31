@@ -12,7 +12,13 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors());
+// Configure CORS for production
+app.use(cors({
+    origin: process.env.NODE_ENV === 'production' 
+        ? ['https://your-frontend-domain.onrender.com', 'https://your-frontend-domain.vercel.app']
+        : 'http://localhost:3000',
+    credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

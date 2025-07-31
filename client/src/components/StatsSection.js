@@ -11,6 +11,13 @@ import {
   Activity
 } from 'lucide-react';
 
+// Configure axios with environment-based API URL
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const api = axios.create({
+    baseURL: API_BASE_URL,
+    timeout: 10000,
+});
+
 const StatsSection = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -22,15 +29,15 @@ const StatsSection = () => {
       setLoading(true);
       
       // Fetch statistics
-      const statsResponse = await axios.get('/api/registration/stats');
+      const statsResponse = await api.get('/api/registration/stats');
       setStats(statsResponse.data.stats);
       
       // Fetch MongoDB registrations
-      const mongoResponse = await axios.get('/api/registration');
+      const mongoResponse = await api.get('/api/registration');
       setRegistrations(mongoResponse.data.users);
       
       // Fetch Excel data
-      const excelResponse = await axios.get('/api/registration/excel');
+      const excelResponse = await api.get('/api/registration/excel');
       setExcelData(excelResponse.data.registrations);
       
     } catch (error) {

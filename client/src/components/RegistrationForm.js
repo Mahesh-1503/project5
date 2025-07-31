@@ -14,6 +14,13 @@ import {
     AlertCircle
 } from 'lucide-react';
 
+// Configure axios with environment-based API URL
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const api = axios.create({
+    baseURL: API_BASE_URL,
+    timeout: 10000,
+});
+
 const RegistrationForm = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [selectedInterests, setSelectedInterests] = useState([]);
@@ -59,7 +66,7 @@ const RegistrationForm = () => {
             };
 
             // Submit to backend
-            const response = await axios.post('/api/registration', formData);
+            const response = await api.post('/api/registration', formData);
 
             if (response.data.success) {
                 toast.success('Registration successful! Data saved to database and Excel file.');

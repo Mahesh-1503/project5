@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: mern-registration-backend
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: MONGODB_URI
+        value: mongodb+srv://username:password@cluster.mongodb.net/registration_app
+      - key: PORT
+        value: 10000
+      - key: EXCEL_FILE_PATH
+        value: ./data/registrations.xlsx
+      - key: NODE_ENV
+        value: production
+
+  - type: web
+    name: mern-registration-frontend
+    env: static
+    buildCommand: cd client && npm install && npm run build
+    staticPublishPath: ./client/build
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://mern-registration-backend.onrender.com 

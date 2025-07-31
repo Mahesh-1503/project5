@@ -1,0 +1,32 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "client/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "client/$1"
+    }
+  ],
+  "env": {
+    "MONGODB_URI": "mongodb+srv://username:password@cluster.mongodb.net/registration_app",
+    "PORT": "3000",
+    "EXCEL_FILE_PATH": "./data/registrations.xlsx",
+    "NODE_ENV": "production"
+  }
+} 
