@@ -1,8 +1,11 @@
 services:
   - type: web
-    name: mern-registration-backend
+    name: mern-registration-app
     env: node
-    buildCommand: npm install
+    buildCommand: |
+      npm install
+      cd client && npm install && npm run build
+      cd ..
     startCommand: npm start
     envVars:
       - key: MONGODB_URI
@@ -12,13 +15,4 @@ services:
       - key: EXCEL_FILE_PATH
         value: ./data/registrations.xlsx
       - key: NODE_ENV
-        value: production
-
-  - type: web
-    name: mern-registration-frontend
-    env: static
-    buildCommand: cd client && npm install && npm run build
-    staticPublishPath: ./client/build
-    envVars:
-      - key: REACT_APP_API_URL
-        value: https://mern-registration-backend.onrender.com 
+        value: production 

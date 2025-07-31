@@ -54,11 +54,39 @@ app.get('/api/health', (req, res) => {
 
 // Serve static files from React app in production
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, 'client/build')));
+  // Check if the build directory exists
+  const buildPath = path.join(__dirname, 'client/build');
+  const indexPath = path.join(buildPath, 'index.html');
   
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
-  });
+  if (fs.existsSync(buildPath)) {
+    console.log('✅ Found React build directory, serving static files');
+    app.use(express.static(buildPath));
+    
+    app.get('*', (req, res) => {
+      if (fs.existsSync(indexPath)) {
+        res.sendFile(indexPath);
+      } else {
+        res.status(404).json({ 
+          error: 'Frontend not built',
+          message: 'React build files not found. Please build the frontend first.',
+          path: indexPath
+        });
+      }
+    });
+  } else {
+    console.log('⚠️  React build directory not found, serving API only');
+    // If no frontend build, serve API only
+    app.get('*', (req, res) => {
+      res.status(404).json({ 
+        error: 'Not Found',
+        message: 'This is a backend API server. Frontend not available.',
+        apiEndpoints: {
+          health: '/api/health',
+          registration: '/api/registration'
+        }
+      });
+    });
+  }
 }
 
 // Error handling middleware
