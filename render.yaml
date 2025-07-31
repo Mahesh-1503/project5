@@ -1,10 +1,8 @@
 services:
   - type: web
-    name: mern-registration-app
+    name: mern-registration-backend
     env: node
-    buildCommand: |
-      npm install
-      npm run build
+    buildCommand: npm install
     startCommand: npm start
     envVars:
       - key: MONGODB_URI
